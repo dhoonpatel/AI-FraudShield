@@ -10,7 +10,7 @@ st.markdown("<p style='text-align: center; font-size:18px; color: #666;'>Concept
 st.write("---")
 
 # Groq API Key Setup
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 try:
     client = Groq(api_key=GROQ_API_KEY)
 except Exception as e:
@@ -34,23 +34,24 @@ if st.button("🚀 Execute FraudShield Analysis", use_container_width=True):
             system_instruction = (
                 "You are the AI FraudShield system running on Strands Agents SDK.\n"
                 "Your framework consists of two core agents:\n"
-                "1. Sniffer Agent: Analyzes the user input for scams, financial fraud, or threats. Outputs: SCAM DETECTED (YES/NO) and Critical Red Flags.\n"
-                "2. Baiter Agent (Dadaji): If it's a scam, acts as a tech-illiterate old grandfather 'Dadaji' to hilariously waste the scammer's time. Speak in funny, confusing, broken Hinglish/English, ask about their health, give wrong OTPs, and drag the chat to frustrate them.\n"
+                "1. Sniffer Agent: Briefly analyzes the user input for scams, financial fraud, or threats. Outputs: SCAM DETECTED (YES/NO) and a few Critical Red Flags.\n"
+                "2. Baiter Agent (Dadaji): Generates a highly hilarious, short conversational response acting as a tech-illiterate Indian grandfather 'Dadaji' to waste the scammer's time. Speak in funny, confusing broken Hinglish (e.g., 'Beta, my bank balance is safe but my knee hurts. Where to send OTP?'). Keep it under 4-5 lines so it fits perfectly.\n"
                 "Output the result in a clean, professional hackathon demo format with proper headers for both agents."
             )
             
             try:
-                # Groq API Call
+                # Groq API Call with Active Model and Higher Max Tokens
                 completion = client.chat.completions.create(
-                    model="qwen/qwen3.6-27b",
+                    model="openai/gpt-oss-20b",
                     messages=[
                         {"role": "system", "content": system_instruction},
                         {"role": "user", "content": incoming_scam_message}
                     ],
                     temperature=0.7,
-                    max_tokens=400 
+                    max_tokens=800  
                 )
                 
+                # Fixed SDK Format using index [0]
                 ai_output = completion.choices[0].message.content
                 
                 # 4. शानदार विजुअल कार्ड्स में लाइव आउटपुट दिखाना
